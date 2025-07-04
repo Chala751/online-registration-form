@@ -46,7 +46,9 @@ export default async function handler(req, res) {
       let certificatePath = ''
       const file = files.certificate
       if (file && file.filepath) {
-        certificatePath = file.filepath.replace(path.join(process.cwd(), '/public'), '')
+         const fileName = path.basename(file.filepath) 
+         certificatePath = `/uploads/${fileName}`      
+
       }
 
       try {
