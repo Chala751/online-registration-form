@@ -1,5 +1,6 @@
 import { getSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
+import LogoutButton from '@/components/LogoutButton'
 
 export default function AdminPage({ user }) {
   const [students, setStudents] = useState([])
@@ -11,10 +12,16 @@ export default function AdminPage({ user }) {
   }, [])
 
   return (
-    <div className="max-w-5xl mx-auto mt-10 p-4">
-      <h1 className="text-2xl font-bold mb-4">Welcome, {user.name}</h1>
-      <h2 className="text-xl mb-6">Registered Students</h2>
-      <table className="w-full border">
+    <div className="max-w-6xl mx-auto mt-10 p-4">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold">Welcome, {user.name}</h1>
+        <LogoutButton />
+      </div>
+
+      {/* Table */}
+      <h2 className="text-xl font-semibold mb-4">Registered Students</h2>
+      <table className="w-full border text-sm">
         <thead>
           <tr className="bg-gray-100">
             <th className="p-2">Name</th>
@@ -26,7 +33,7 @@ export default function AdminPage({ user }) {
         </thead>
         <tbody>
           {students.map((student, idx) => (
-            <tr key={idx} className="border-t">
+            <tr key={idx} className="border-t hover:bg-gray-50">
               <td className="p-2">{student.fullName}</td>
               <td className="p-2">{student.email}</td>
               <td className="p-2">{student.phone}</td>
@@ -53,7 +60,7 @@ export default function AdminPage({ user }) {
   )
 }
 
-
+// Server-side session check
 export async function getServerSideProps(context) {
   const session = await getSession(context)
 
