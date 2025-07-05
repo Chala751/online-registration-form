@@ -1,6 +1,7 @@
+import { getSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 
-export default function AdminPage() {
+export default function AdminPage({ user }) {
   const [students, setStudents] = useState([])
 
   useEffect(() => {
@@ -11,7 +12,8 @@ export default function AdminPage() {
 
   return (
     <div className="max-w-5xl mx-auto mt-10 p-4">
-      <h1 className="text-2xl font-bold mb-4">Registered Students</h1>
+      <h1 className="text-2xl font-bold mb-4">Welcome, {user.name}</h1>
+      <h2 className="text-xl mb-6">Registered Students</h2>
       <table className="w-full border">
         <thead>
           <tr className="bg-gray-100">
@@ -49,4 +51,24 @@ export default function AdminPage() {
       </table>
     </div>
   )
+}
+
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context)
+
+  if (!session || session.user.role !== 'admin') {
+    return {
+      redirect: {
+        destination: '/unauthorized',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {
+      user: session.user,
+    },
+  }
 }
