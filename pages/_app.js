@@ -1,6 +1,12 @@
 // pages/_app.js
 import '../globals.css'
+import { Toaster } from 'sonner'
 
-export default function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+export default function App({ Component, pageProps }) {
+  return (
+    <>
+      <Toaster richColors position="top-center" />
+      <Component {...pageProps} />
+    </>
+  )
 }

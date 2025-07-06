@@ -71,7 +71,7 @@ export default function AdminPage({ user }) {
   )
 }
 
-// Server-side session check
+// ✅ Only using getServerSideProps — no conflict with SSG
 export async function getServerSideProps(context) {
   const session = await getSession(context)
 
