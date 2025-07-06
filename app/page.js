@@ -35,6 +35,21 @@ export default function HomePage() {
     }
   }
 
+  const handleApplyClick = () => {
+    toast(
+      'You can apply by clicking the user icon in the header.',
+      {
+        icon: <UserPlus className="text-purple-600 w-5 h-5" />
+      }
+    )
+  }
+
+  const handleNewFeatureClick = () => {
+    toast('Coming soon!', {
+      icon: <LogIn className="text-indigo-600 w-5 h-5" />
+    })
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-blue-100 to-pink-100">
       {/* Header */}
@@ -62,7 +77,7 @@ export default function HomePage() {
         </div>
       </header>
 
-{/* Admin Login form */}
+      {/* Admin Login form */}
       {showLogin && (
         <div className="max-w-md mx-auto mt-12 bg-white/90 backdrop-blur-md p-8 shadow-xl rounded-2xl border border-white/30">
           <h2 className="text-xl font-bold text-center text-gray-800 mb-4">Admin Login</h2>
@@ -93,31 +108,31 @@ export default function HomePage() {
       )}
 
       {/* Hero Section */}
-    <section className="text-center py-20 px-6 bg-gradient-to-br from-indigo-100 via-blue-100 to-pink-100">
-     <div className="max-w-4xl mx-auto">
-      <h2 className="text-4xl md:text-5xl font-bold text-indigo-800 mb-6 leading-tight">
-        Empower Your Tech Journey <br className="hidden md:block" />
-         with <span className="text-purple-700">C_Company Camp</span>
-      </h2>
-      <p className="text-gray-700 text-lg md:text-xl mb-8">
-       Learn, build, and connect with future innovators. Our bootcamp is designed to boost your skills and career in tech.
-      </p>
-      <div className="flex justify-center space-x-4">
-       <button
-         onClick={() => router.push('')}
-         className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold px-6 py-3 rounded-lg hover:opacity-90 transition"
-       >
-        Applay Now
-       </button>
-       <button
-        
-        className="border border-indigo-500 text-indigo-700 font-semibold px-6 py-3 rounded-lg hover:bg-indigo-100 transition"
-       >
-        New features
-       </button>
-      </div>
-     </div>
-    </section>
+      <section className="text-center py-20 px-6 bg-gradient-to-br from-indigo-100 via-blue-100 to-pink-100">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-4xl md:text-5xl font-bold text-indigo-800 mb-6 leading-tight">
+            Empower Your Tech Journey <br className="hidden md:block" />
+            with <span className="text-purple-700">C_Company Camp</span>
+          </h2>
+          <p className="text-gray-700 text-lg md:text-xl mb-8">
+            Learn, build, and connect with future innovators. Our bootcamp is designed to boost your skills and career in tech.
+          </p>
+          <div className="flex justify-center space-x-4">
+            <button
+              onClick={handleApplyClick}
+              className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold px-6 py-3 rounded-lg hover:opacity-90 transition cursor-pointer"
+            >
+              Apply Now
+            </button>
+            <button
+              onClick={handleNewFeatureClick}
+              className="border border-indigo-500 text-indigo-700 font-semibold px-6 py-3 rounded-lg hover:bg-indigo-100 transition cursor-pointer"
+            >
+              New Features
+            </button>
+          </div>
+        </div>
+      </section>
     </div>
   )
 }
