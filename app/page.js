@@ -1,12 +1,12 @@
 'use client'
-import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-
-
 
 import { useState } from 'react'
+import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { LogIn } from 'lucide-react'
 
-export default function LoginPage() {
+export default function HomePage() {
+  const [showLogin, setShowLogin] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
 
@@ -29,16 +29,44 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="max-w-sm mx-auto mt-20 p-6 shadow-md bg-white">
-      <h1 className="text-xl font-bold mb-4">Admin Login</h1>
-      <form onSubmit={handleLogin} className="space-y-4">
-        <input name="email" placeholder="Email" className="w-full p-2 border" required />
-        <input name="password" type="password" placeholder="Password" className="w-full p-2 border" required />
-        {error && <p className="text-red-500">{error}</p>}
-        <button type="submit" className="bg-blue-600 text-white py-2 px-4 rounded">
-          Login
+    <div className="min-h-screen bg-gray-100">
+      {/* Header */}
+      <header className="flex items-center justify-between px-6 py-4 bg-white shadow">
+        <h1 className="text-2xl font-bold text-gray-800">C_Company</h1>
+        <button onClick={() => setShowLogin(!showLogin)} title="Admin Login">
+          <LogIn className="w-6 h-6 text-blue-600 hover:text-blue-800" />
         </button>
-      </form>
+      </header>
+
+      {/* Login form shown only when icon clicked */}
+      {showLogin && (
+        <div className="max-w-md mx-auto mt-12 bg-white p-6 shadow-md rounded">
+          <h2 className="text-xl font-semibold mb-4">Admin Login</h2>
+          <form onSubmit={handleLogin} className="space-y-4">
+            <input
+              name="email"
+              type="email"
+              placeholder="Email"
+              className="w-full p-2 border border-gray-300 rounded"
+              required
+            />
+            <input
+              name="password"
+              type="password"
+              placeholder="Password"
+              className="w-full p-2 border border-gray-300 rounded"
+              required
+            />
+            {error && <p className="text-red-500">{error}</p>}
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+            >
+              Login
+            </button>
+          </form>
+        </div>
+      )}
     </div>
   )
 }
