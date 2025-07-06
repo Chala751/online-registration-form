@@ -4,8 +4,9 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { toast } from 'sonner'
-import { CheckCircle, FileText } from 'lucide-react'
+import { CheckCircle, FileText, Home } from 'lucide-react'
 import { useState } from 'react'
+import Link from 'next/link'
 
 const schema = z.object({
   fullName: z.string().min(1, 'Full name is required'),
@@ -45,8 +46,17 @@ export default function RegisterForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-blue-100 to-pink-100 flex items-center justify-center px-4 py-10">
-      <div className="w-full max-w-6xl bg-white shadow-xl rounded-3xl overflow-hidden flex flex-col md:flex-row border border-white/30">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-blue-100 to-pink-100 flex items-center justify-center px-4 py-10 relative">
+      {/* Home Link Icon */}
+      <Link
+        href="/"
+        className="absolute top-6 left-6 flex items-center gap-2 text-indigo-700 hover:text-indigo-900 transition mb-10"
+      >
+        <Home className="w-5 h-5" />
+        <span className="font-medium hidden md:inline">Back to Home</span>
+      </Link>
+
+      <div className="w-full max-w-6xl bg-white shadow-xl rounded-3xl overflow-hidden flex flex-col md:flex-row border border-white/30 mt-5">
         {/* Left Panel */}
         <div className="relative bg-gradient-to-br from-indigo-700 to-purple-700 text-white md:w-1/2 w-full flex items-center justify-center p-10">
           <div className="space-y-6 text-center">
