@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
-import { LogIn, UserPlus } from 'lucide-react'
+import { LogIn, UserPlus, CheckCircle, XCircle } from 'lucide-react'
+import { toast } from 'sonner'
 
 export default function HomePage() {
   const [showLogin, setShowLogin] = useState(false)
@@ -18,12 +19,18 @@ export default function HomePage() {
     const res = await signIn('credentials', {
       redirect: false,
       email,
-      password
+      password,
     })
 
     if (res.ok) {
+      toast.success('Login successful!', {
+        icon: <CheckCircle className="text-green-600 w-5 h-5" />
+      })
       router.push('/admin')
     } else {
+      toast.error('Invalid credentials. Please try again.', {
+        icon: <XCircle className="text-red-600 w-5 h-5" />
+      })
       setError('Invalid credentials')
     }
   }
