@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { LogIn } from 'lucide-react'
+import { signIn } from 'next-auth/react'
+import { LogIn, UserPlus } from 'lucide-react'
 
 export default function HomePage() {
   const [showLogin, setShowLogin] = useState(false)
@@ -33,12 +33,24 @@ export default function HomePage() {
       {/* Header */}
       <header className="flex items-center justify-between px-6 py-4 bg-white shadow">
         <h1 className="text-2xl font-bold text-gray-800">C_Company</h1>
-        <button onClick={() => setShowLogin(!showLogin)} title="Admin Login">
-          <LogIn className="w-6 h-6 text-blue-600 hover:text-blue-800" />
-        </button>
+
+        <div className="flex items-center space-x-4">
+          {/* Register icon */}
+          <button
+            onClick={() => router.push('/register')}
+            title="Student Register"
+          >
+            <UserPlus className="w-6 h-6 text-green-600 hover:text-green-800 cursor-pointer" />
+          </button>
+
+          {/* Admin login icon */}
+          <button onClick={() => setShowLogin(!showLogin)} title="Admin Login">
+            <LogIn className="w-6 h-6 text-blue-600 hover:text-blue-800 cursor-pointer" />
+          </button>
+        </div>
       </header>
 
-      {/* Login form shown only when icon clicked */}
+      {/* Admin Login form */}
       {showLogin && (
         <div className="max-w-md mx-auto mt-12 bg-white p-6 shadow-md rounded">
           <h2 className="text-xl font-semibold mb-4">Admin Login</h2>
