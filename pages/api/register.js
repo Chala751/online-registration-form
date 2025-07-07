@@ -1,10 +1,8 @@
 import formidable from 'formidable'
-import fs from 'fs'
-import path from 'path'
+import cloudinary from '@/lib/cloudinary'
 import dbConnect from '@/lib/mongo'
 import Student from '@/models/Student'
 
-// Disable body parsing (required for formidable)
 export const config = {
   api: {
     bodyParser: false,
@@ -16,58 +14,46 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: 'Method not allowed' })
   }
 
-  try {
-    await dbConnect()
+  await dbConnect()
 
-    // Ensure uploads folder exists
-    const uploadDir = path.join(process.cwd(), '/public/uploads')
-    if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true })
+  const form = formidable({ keepExtensions: true })
 
-    const form = formidable({
-      uploadDir,
-      keepExtensions: true,
-      multiples: false,
-    })
+  form.parse(req, async (err, fields, files) => {
+    if (err) return res.status(500).json({ message: 'Form parsing failed' })
 
-    // Parse the form data
-    form.parse(req, async (err, fields, files) => {
-      if (err) {
-        console.error('Form parse error:', err)
-        return res.status(500).json({ message: 'Form parsing failed' })
-      }
+    const fullName = fields.fullName?.[0] || fields.fullName
+    const email = fields.email?.[0] || fields.email
+    const phone = fields.phone?.[0] || fields.phone
+    const interest = fields.interest?.[0] || fields.interest
 
-      // Convert fields (which are arrays) into strings
-      const fullName = Array.isArray(fields.fullName) ? fields.fullName[0] : fields.fullName
-      const email = Array.isArray(fields.email) ? fields.email[0] : fields.email
-      const phone = Array.isArray(fields.phone) ? fields.phone[0] : fields.phone
-      const interest = Array.isArray(fields.interest) ? fields.interest[0] : fields.interest
+    let certificateUrl = ''
 
-      // Handle file path
-      let certificatePath = ''
-      const file = files.certificate
-      if (file && file.filepath) {
-         const fileName = path.basename(file.filepath) 
-         certificatePath = `/uploads/${fileName}`      
-
-      }
-
+    const file = files.certificate
+    if (file) {
       try {
-        const student = await Student.create({
-          fullName,
-          email,
-          phone,
-          interest,
-          certificateUrl: certificatePath,
+        const result = await cloudinary.uploader.upload(file.filepath, {
+          folder: 'certificates',
+          resource_type: 'auto',
         })
-
-        return res.status(201).json({ message: 'Student registered', student })
-      } catch (dbError) {
-        console.error('Database error:', dbError)
-        return res.status(500).json({ message: 'Failed to save student' })
+        certificateUrl = result.secure_url
+      } catch (uploadErr) {
+        console.error('Cloudinary upload failed:', uploadErr)
+        return res.status(500).json({ message: 'Certificate upload failed' })
       }
-    })
-  } catch (e) {
-    console.error('Unexpected server error:', e)
-    return res.status(500).json({ message: 'Server error' })
-  }
+    }
+
+    try {
+      const student = await Student.create({
+        fullName,
+        email,
+        phone,
+        interest,
+        certificateUrl,
+      })
+      return res.status(201).json({ message: 'Student registered', student })
+    } catch (dbErr) {
+      console.error('DB error:', dbErr)
+      return res.status(500).json({ message: 'Failed to save student' })
+    }
+  })
 }
